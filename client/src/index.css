@@ -1,0 +1,159 @@
+* {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+  outline: none;
+  color: black;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+.wrapper {
+  max-width: 40%;
+  /* margin: 0 auto; */
+  min-width: 100%;
+}
+
+.join-block {
+  margin: 0 auto;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.join-block__input {
+  font-size: 24px;
+  height: 50px;
+  padding: 0 10px;
+  margin-bottom: 10px;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); */
+}
+
+.join-block__button {
+  padding: 15px;
+  margin-top: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #2270a3;
+  color: #fff;
+  border: none;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.chat {
+  display: flex;
+  height: 100vh;
+  border: 1px solid rgba(159, 183, 197, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chat-users {
+  border-right: 1px solid rgba(159, 183, 197, 0.1);
+  padding: 20px;
+  width: 200px;
+  background-color: #f6f9fa;
+}
+
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  padding: 30px;
+}
+
+.chat__btns-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat__btn {
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.chat__send-button {
+  background-color: #2270a3;
+}
+
+.chat__share-button {
+  background-color: #0ea591;
+}
+
+.chat__start-video-button {
+  background-color: #7160ff;
+}
+
+.chat__exit-button {
+  background-color: #fc4454;
+}
+
+.messages {
+  height: calc(100% - 145px);
+  overflow: auto;
+}
+
+.message {
+  margin-bottom: 20px;
+}
+
+.message p {
+  display: inline-flex;
+  border-radius: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #7160ff;
+  padding: 10px 15px 15px;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.message-time {
+  margin-left: 30px;
+}
+
+.message span {
+  opacity: 0.5;
+  font-size: 14px;
+}
+
+.chat-users ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-users ul li {
+  margin-top: 10px;
+  border-radius: 3px;
+  background-color: #fff;
+  padding: 8px 14px;
+  box-shadow: 0 3px 5px rgba(159, 183, 197, 0.1);
+  font-weight: 500;
+}
+
+.chat-messages form {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chat-messages form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.video-grid {
+  background-color: rgba(159, 183, 197, 0.1);
+  min-width: 300px;
+}
