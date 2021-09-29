@@ -11,11 +11,11 @@ function Chat({ users, messages, userName, roomId, onAddMessage, onLogout, onSta
 
   const getVideo = () => {
     navigator.mediaDevices
-      .getUserMedia({ video: {width: '300px'}, audio: true })
+      .getUserMedia({ video: {width: '200px'}, audio: true })
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
-        // video.muted = true;
+        video.muted = true;
         video.play();
       })
       .catch(err => {
