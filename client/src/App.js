@@ -10,26 +10,43 @@ import Chat from './components/Chat';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 
-// import './App.css';
 
 function App() {
   const [state, dispatch] = React.useReducer(rootReducer, initState);
 
   const { request } = useHttp();
 
-  const onLogin = useCallback(async (obj) => {
-    localStorage.setItem('userData', JSON.stringify({...obj}));
-    dispatch({
-      type: 'JOINED',
-      payload: obj,
-    });
+  useEffect(() => {
+    socket.on('USER:CONNECT', (id) => {
+      dispatch({type: 'SET_SOCKETID', payload: id})
+    })
+    socket.on('ROOM:SET_USERS', setUsers);
+    socket.on('ROOM:NEW_MESSAGE', addMessage);
+    return () => {
+      socket.off('ROOM:SET_USERS');
+      socket.off('ROOM:NEW_MESSAGE');
+    };
+  }, []);
+
+
+  const onLogin = useCallback( async (obj) => {
     await request('/rooms', 'POST', obj);
     socket.emit('ROOM:JOIN', obj);
-    const data = await request(`/rooms/${obj.roomId}`);
-    dispatch({
-      type: 'SET_DATA',
-      payload: data,
-    });
+      localStorage.setItem('userData', JSON.stringify({...obj}));
+      dispatch({
+        type: 'JOINED',
+        payload: obj,
+      });
+    request(`/rooms/${obj.roomId}`).then(data => {
+      let modifyData = {...data}
+      if (!modifyData.users.includes(obj.userName)) {
+        modifyData.users = [...modifyData.users, obj.userName];
+      }
+      dispatch({
+        type: 'SET_DATA',
+        payload: modifyData,
+      });
+    });    
   }, [request]);
 
   useEffect(() => {
@@ -48,13 +65,12 @@ function App() {
     localStorage.removeItem('userData');
     dispatch({type: 'LOGOUT'});
     socket.emit('LOGOUT');
-    console.log(state);
   }
 
-  const setUsers = (users) => {
+  const setUsers = (data) => {
     dispatch({
       type: 'SET_USERS',
-      payload: users,
+      payload: {...data},
     });
   };
 
@@ -64,11 +80,6 @@ function App() {
       payload: message,
     });
   };
-
-  React.useEffect(() => {
-    socket.on('ROOM:SET_USERS', setUsers);
-    socket.on('ROOM:NEW_MESSAGE', addMessage);
-  }, []);
 
 
   return (
