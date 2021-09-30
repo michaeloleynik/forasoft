@@ -16,27 +16,16 @@ function App() {
 
   const { request } = useHttp();
 
-  useEffect(() => {
-    socket.on('USER:CONNECT', (id) => {
-      dispatch({type: 'SET_SOCKETID', payload: id})
-    })
-    socket.on('ROOM:SET_USERS', setUsers);
-    socket.on('ROOM:NEW_MESSAGE', addMessage);
-    return () => {
-      socket.off('ROOM:SET_USERS');
-      socket.off('ROOM:NEW_MESSAGE');
-    };
-  }, []);
-
-
-  const onLogin = useCallback( async (obj) => {
+  
+  
+  const onLogin = useCallback( async (obj) => { // automatically login using localstorage
     await request('/rooms', 'POST', obj);
     socket.emit('ROOM:JOIN', obj);
-      localStorage.setItem('userData', JSON.stringify({...obj}));
-      dispatch({
-        type: 'JOINED',
-        payload: obj,
-      });
+    localStorage.setItem('userData', JSON.stringify({...obj}));
+    dispatch({
+      type: 'JOINED',
+      payload: obj,
+    });
     request(`/rooms/${obj.roomId}`).then(data => {
       let modifyData = {...data}
       if (!modifyData.users.includes(obj.userName)) {
@@ -48,10 +37,43 @@ function App() {
       });
     });    
   }, [request]);
-
-  useEffect(() => {
+  
+  
+  const onLogout = () => {
+    localStorage.removeItem('userData');
+    dispatch({type: 'LOGOUT'});
+    socket.emit('LOGOUT');
+  }
+  
+  const setUsers = (data) => {
+    dispatch({
+      type: 'SET_USERS',
+      payload: {...data},
+    });
+  };
+  
+  const addMessage = (message) => {
+    dispatch({
+      type: 'NEW_MESSAGE',
+      payload: message,
+    });
+  };
+  
+  useEffect(() => { 
+    socket.on('USER:CONNECT', (id) => {
+      dispatch({type: 'SET_SOCKETID', payload: id})
+    })
+    socket.on('ROOM:SET_USERS', setUsers);
+    socket.on('ROOM:NEW_MESSAGE', addMessage);
+    return () => {
+      socket.off('ROOM:SET_USERS');
+      socket.off('ROOM:NEW_MESSAGE');
+    };
+  }, []);
+  
+  useEffect(() => { // check is user auth?
     const data = JSON.parse(localStorage.getItem('userData'));
-
+    
     if (data && data.roomId && data.userName) {
       const obj = {
         roomId: data.roomId,
@@ -60,27 +82,6 @@ function App() {
       return onLogin(obj);
     }
   }, [onLogin]);
-
-  const onLogout = () => {
-    localStorage.removeItem('userData');
-    dispatch({type: 'LOGOUT'});
-    socket.emit('LOGOUT');
-  }
-
-  const setUsers = (data) => {
-    dispatch({
-      type: 'SET_USERS',
-      payload: {...data},
-    });
-  };
-
-  const addMessage = (message) => {
-    dispatch({
-      type: 'NEW_MESSAGE',
-      payload: message,
-    });
-  };
-
 
   return (
     <BrowserRouter>

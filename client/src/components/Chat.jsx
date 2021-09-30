@@ -41,7 +41,6 @@ function Chat({ peers, users, messages, userName, userSocketId, roomId, onAddMes
       .then(stream => {
         let video = videoRef.current;
         video.srcObject = stream;
-        // video.muted = true;
         const otherUsers = peers.filter(id => id !== userSocketId);
         otherUsers.forEach(user => {
           const peer = createPeer(user, userSocketId, stream);
@@ -69,7 +68,7 @@ function Chat({ peers, users, messages, userName, userSocketId, roomId, onAddMes
     setIsVideo(false);
   }
 
-  function createPeer(userToSignal, callerID, stream) {
+  function createPeer(userToSignal, callerID, stream) { // create connection with other users
     const peer = new Peer({
         initiator: true,
         trickle: false,
