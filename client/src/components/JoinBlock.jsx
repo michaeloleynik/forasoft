@@ -29,27 +29,29 @@ function JoinBlock({onLogin, isInvite}) {
   };
 
   return (
-    <div className="join-block">
-      <input
-        className="join-block__input"
-        type="text"
-        placeholder="Enter your name"
-        value={userName}
-        onChange={(e) => setUserName(e.target.value)}
-      />
-      {
-        !isInvite &&
+    <div className="block">
+      <div className="join-block">
         <input
+          className="join-block__input"
+          type="text"
+          placeholder="Enter your name"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          />
+        {
+          !isInvite &&
+          <input
           className="join-block__input"
           type="text"
           placeholder="Room ID"
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
-        />
-      }
-      <button disabled={isLoading} onClick={onEnter} className="join-block__button">
-        {isLoading ? 'WAIT...' : 'LOGIN'}
-      </button>
+          />
+        }
+        <button disabled={isLoading} onClick={onEnter} className="join-block__button">
+          {isLoading ? 'WAIT...' : 'LOGIN'}
+        </button>
+      </div>
     </div>
   );
 }
